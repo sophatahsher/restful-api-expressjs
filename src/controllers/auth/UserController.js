@@ -1,10 +1,41 @@
-import mongoose from "mongoose";
+////import mongoose from "mongoose";
 
-import { UserModel } from "../../models/auth/UserModel"
+import { userModel } from "../../models/auth/UserModel"
+import httStatus from "../../../utils/httpStatus"
 
 // create schema model with tablename
-const User = mongoose.model('User', UserModel);
 //const User = mongoose.model('User', UserModel);
+const UserController = {};
+
+UserController.register = async(req, res, next) => {
+    try
+    {
+        userModel.find({username: req.body.username}).exec().then(result => {
+            console.log('Result =======', result);
+        });
+        /*
+        const userData = new User({
+            username: req.body.username,
+            password: req.body.password,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            email: req.body.email
+        });
+
+        // Add
+        const result  = await UserModel.create(userData);
+
+        let {password, __v, ...user} = result.toObject();
+        */
+        // response
+        //return res.status(httStatus.CREATED).json({status: 200, message: "User account has been added"});
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+/*
 
 export const createUserAccount = async(req, res) => {
         try
@@ -113,4 +144,11 @@ export const deleteAccount = async(req, res) =>
         console.log(err.message);
     }
 }
+
+const createAccount = (req, res, next) => {
+    res.json({message: "POST new account"}); // dummy function for now
+}
+*/
+export default UserController;
+//module.exports = {createAccount};
 

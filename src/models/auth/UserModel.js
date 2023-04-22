@@ -1,32 +1,34 @@
 import mongoose from "mongoose";
 
 // setting schema options
-export const UserModel = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     username: {
         type: String,
-        //require: true,
-        message: 'Enter Account Username'
+        require: true
     },
     password: {
         type: String,
         require: true
-        //requried: [true, "Please enter password"]
-        //require: 'Enter Account Password'
     },
     firstname: {
         type: String,
         require: true
-        //require: 'Enter your FirstName'
     },
     lastname: {
         type: String,
         require: true
-        //require: 'Enter your LastName'
+    },
+    address: {
+        type: String,
+        require: true
     },
     email: {
         type: String,
         require: true
-        //require: 'Enter your email address'
+    },
+    phone: {
+        type: Number,
+        required: true
     },
     createdAt: {
         type: Date,
@@ -34,4 +36,7 @@ export const UserModel = new mongoose.Schema({
     }
 });
 
-console.log('Username => ', UserModel.path('username'));
+const userModel = mongoose.model("users", userSchema);
+
+export {userModel};
+//console.log('Username => ', UserModel.path('username'));

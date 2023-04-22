@@ -1,5 +1,7 @@
 import { createUserAccount, getUserAccountInfo, getUserAccountById, updateAccountSetting, deleteAccount } from "../controllers/auth/UserController";
 
+import UserController from "../controllers/auth/UserController";
+
 const routes = (app) => {
     
     app.route('/user')
@@ -19,6 +21,8 @@ const routes = (app) => {
     // update Account User
     .put(updateAccountSetting)
     .delete(deleteAccount)
+
+    app.post('/user/add', UserController.register)
 }
 
 export default routes;
