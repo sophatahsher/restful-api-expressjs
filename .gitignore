@@ -1,0 +1,9 @@
+node_modules
+
+# Phpstorm IDE
+.idea
+
+# iOS
+.DS_Store
+
+public/*
