@@ -1,9 +1,9 @@
-import express from "express";
-import bodyParser from "body-parser";
-import morgan from "morgan";
-import router from "./routes/route";
-import dotenv from "dotenv";
-import connectMongo from "./config/databases/mongoconnect";
+import express from 'express';
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
+import router from './routes/route';
+import dotenv from 'dotenv';
+import connectMongo from './config/databases/mongoconnect';
 
 const app = express();
 
@@ -11,12 +11,11 @@ const app = express();
 const isProd = process.env.NODE_ENV === 'production';
 
 // https debug
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 
 // bodyParser setup
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 
 // DB Connection
 connectMongo();
@@ -25,13 +24,13 @@ connectMongo();
 app.use(express.static('public'));
 
 // Setup Route
-app.use(router)
+app.use(router);
 //app.use('/', mainRouter)
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 console.log('PORT======', process.env.PORT);
-app.listen(PORT, ()=> {
+app.listen(PORT, () => {
     console.log(`Server is running on isProductions => ${isProd}`);
-    console.log(`Your server is running on port ${PORT}`)
+    console.log(`Your server is running on port ${PORT}`);
 });

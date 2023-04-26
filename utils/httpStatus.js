@@ -53,7 +53,7 @@ const httpStatus = {
     INSUFFICIENT_STORAGE: 507,
     BANDWIDTH_LIMIT_EXCEEDED: 509,
     NOT_EXTENDED: 510,
-    NETWORK_AUTHENTICATION_REQUIRED: 511
-  };
-  
-  export default httpStatus;
+    NETWORK_AUTHENTICATION_REQUIRED: 511,
+};
+
+export default httpStatus;

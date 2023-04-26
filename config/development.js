@@ -4,9 +4,9 @@ const devConfig = {
     mongo_debug: true,
 
     // JWT
-    JWT_KEY: "0123456789",
-    JWT_EXPIRATION:360000,
-    jwt_key: "0123456789",
-    jwt_expiration: 360000
-}
+    JWT_KEY: '0123456789',
+    JWT_EXPIRATION: 360000,
+    jwt_key: '0123456789',
+    jwt_expiration: 360000,
+};
 export default devConfig;

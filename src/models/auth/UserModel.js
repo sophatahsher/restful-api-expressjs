@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const schema = mongoose.Schema;
 
@@ -6,39 +6,39 @@ const schema = mongoose.Schema;
 const userSchema = new schema({
     username: {
         type: String,
-        required: true
+        required: true,
     },
     password: {
         type: String,
-        required: true
+        required: true,
     },
     firstname: {
         type: String,
-        required: true
+        required: true,
     },
     lastname: {
         type: String,
-        required: true
+        required: true,
     },
     address: {
         type: String,
-        required: true
+        required: true,
     },
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     phone: {
         type: String,
-        required: true
+        required: true,
     },
     createdAt: {
         type: Date,
-        default: Date.now
-    }
+        default: Date.now,
+    },
 });
 
-const UserModel = mongoose.model("users", userSchema);
-export {UserModel};
+const UserModel = mongoose.model('users', userSchema);
+export { UserModel };
 //console.log('Username => ', UserModel.path('username'));

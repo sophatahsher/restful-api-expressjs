@@ -1,9 +1,8 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
 export const UserSchema = new Schema({
-
     username: {
         type: String,
         require: true,
@@ -31,6 +30,6 @@ export const UserSchema = new Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now
-    }
+        default: Date.now,
+    },
 });

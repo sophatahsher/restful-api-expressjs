@@ -1,2 +1,1 @@
-import httpStatus from "../../utils/httpStatus";
-
+import httpStatus from '../../utils/httpStatus';

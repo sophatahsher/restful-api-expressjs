@@ -4,7 +4,7 @@ const prodConfig = {
     mongo_debug: false,
 
     // JWT
-    jwt_key: "",
-    jwt_expiration: 360000
-}
+    jwt_key: '',
+    jwt_expiration: 360000,
+};
 export default prodConfig;

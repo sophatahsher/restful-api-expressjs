@@ -3,7 +3,7 @@ node_modules
 # Phpstorm IDE
 .idea
 
-# iOS
+# MacOS
 .DS_Store
 
 # ENV
