@@ -1,154 +1,156 @@
-////import mongoose from "mongoose";
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken";
+import  {UserModel}  from "../../models/auth/UserModel"
+import httpStatus from "../../../utils/httpStatus"
+import appConfig from "../../../config/config";
 
-import { userModel } from "../../models/auth/UserModel"
-import httStatus from "../../../utils/httpStatus"
-
-// create schema model with tablename
-//const User = mongoose.model('User', UserModel);
 const UserController = {};
+console.log('UserController is called!');
 
-UserController.register = async(req, res, next) => {
-    try
+UserController.register = async (req, res, next) => {
+    try 
     {
-        userModel.find({username: req.body.username}).exec().then(result => {
-            console.log('Result =======', result);
-        });
-        /*
-        const userData = new User({
-            username: req.body.username,
-            password: req.body.password,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            email: req.body.email
-        });
+        const { 
+            username, 
+            password, 
+            email,
+            firstname,
+            lastname,
+            address,
+            phone, 
+            status 
+        } = req.body;
 
-        // Add
-        const result  = await UserModel.create(userData);
+        if ( username && email )
+        {
+            // check exists account
+            const existingAccount = await UserModel.find({email: email}).exec();
 
-        let {password, __v, ...user} = result.toObject();
-        */
-        // response
-        //return res.status(httStatus.CREATED).json({status: 200, message: "User account has been added"});
-    }
-    catch(err)
+            if ( existingAccount.length > 0 ) {
+                return res.status(httpStatus.CONFLICT).json({ message: "Mail already exists!" });
+            }
+            else 
+            {
+                const user = new UserModel(req.body);
+            
+                if (req.body.password) {
+                    user.hash = bcrypt.hashSync(req.body.password, 10);
+                }
+
+                user.password = user.hash;
+
+                let result = await user.save();
+                console.log('result save: ', result);
+                return res.status(httpStatus.CREATED).json({ data: { user } });
+            }
+        }
+        else
+        {
+            // error validation
+            return res.status(httpStatus.BAD_REQUEST).json({
+                status: "ERROR",
+                message: "Bad Request",
+            });
+        }
+    } catch (e) 
     {
-        console.log(err);
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            status: "ERROR",
+            message: e.message,
+        });
     }
 }
-/*
 
-export const createUserAccount = async(req, res) => {
-        try
+// Login user
+UserController.login = async (req, res, next) => {
+    try 
+    {
+        const { email, password } = req.body;
+        const user = await UserModel.findOne({ email: email });
+
+        if (user && bcrypt.compareSync(password, user.password)) 
         {
-            const userObject = new User({
-                username: req.body.username,
-                password: req.body.password,
-                firstname: req.body.firstname,
-                lastname: req.body.lastname,
-                email: req.body.email
+            const accessToken = jwt.sign({ sub: user.id }, appConfig.JWT_KEY, {
+                expiresIn: "7d",
             });
 
-            // Add
-            userObject.save() 
+            const refreshToken = jwt.sign({ sub: user.id }, appConfig.JWT_KEY, {
+               expiresIn: "2m",
+            });
 
-            // response
-            res.json({status: 200, message: "User account has been added"});
+            return res.status(httpStatus.OK).json({
+                accessToken: accessToken,
+                refreshToken: refreshToken
+            });
+        } 
+        else 
+        {
+            return res.status(httpStatus.UNAUTHORIZED).json({
+                message: "Auth failed!",
+            });
         }
-        catch(err)
+    } catch (e) 
+    {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            status: "ERROR",
+            message: e.message,
+        });
+    }
+};
+
+/**
+ * @FindAllCreatedUsers
+ */
+UserController.findAllUsers = async (req, res, next) => {
+    try {
+        let user = await UserModel.find();
+        return res.status(httpStatus.CREATED).json({ data: user });
+    }
+    catch (e) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            status: "ERROR",
+            message: e.message,
+        });
+    }
+}
+
+// Update UserByID
+UserController.updateUserAccount = async (req, res) => {
+    try 
+    {
+        let user = await UserModel.findById(req.params.userId);
+
+        if (!user) 
         {
-            console.log(err);
+            return res.status(httpStatus.BAD_REQUEST).json({ message: "User not found" });
         }
-    }
 
-export const getUserAccountInfo = async(req, res) =>
-{
-    try
+        Object.assign(user, req.body);
+        await user.save();
+        return res.status(httpStatus.OK).json({status: 'success', message: "Update user successfully"});
+
+    } catch (error) {
+        return res.status(500).json({ error: error.toString() });
+    }
+};
+
+// Delete UserByID
+UserController.deleteAccount = async (req, res) => {
+    try 
     {
-        // retrived data of user account
-        
-        User.find({}, (err, data) => 
+        let user = await UserModel.findByIdAndRemove(req.params.userId);
+
+        if (!user) 
         {
-            if(err)
-                res.send({status: 400, message: `${err}`})
+            return res.status(httpStatus.BAD_REQUEST).json({ message: "User not found" });
+        }
 
-            // response
-            res.json({status: 200, data});
-        });
+        return res.status(httpStatus.OK).json({ status: 'success', message: "User deleted successfully!" });
     }
-    catch(err)
+    catch (error) 
     {
-        console.log(err.message);
+        return res.status(500).json({ error: error.toString() });
     }
-}
-
-export const getUserAccountById = async(req, res) =>
-{
-    try
-    {
-        // retrived data of user account
-        
-        User.findById(req.params.userId, (err, data) => 
-        {
-            if(err)
-                res.send({status: 400, message: `${err}`})
-
-            // response
-            res.json({status: 200, data});
-        });
-    }
-    catch(err)
-    {
-        console.log(err.message);
-    }
-}
-
-
-export const updateAccountSetting = async(req, res) =>
-{
-    try
-    {
-        // retrived data of user account
-        
-        User.findOneAndUpdate({_id: req.params.userId}, req.body, {new: true},  (err, data) => 
-        {
-            if(err)
-                res.send({status: 400, message: `${err}`})
-
-            // response
-            res.json({status: 200, data});
-        });
-    }
-    catch(err)
-    {
-        console.log(err.message);
-    }
-}
-
-
-export const deleteAccount = async(req, res) =>
-{
-    try
-    {
-        // retrived data of user account
-        User.remove({_id: req.params.userId},  (err, data) => 
-        {
-            if(err)
-                res.send({status: 400, message: `${err}`})
-
-            // response
-            res.json({status: 200, data});
-        });
-    }
-    catch(err)
-    {
-        console.log(err.message);
-    }
-}
-
-const createAccount = (req, res, next) => {
-    res.json({message: "POST new account"}); // dummy function for now
-}
-*/
+};
 export default UserController;
-//module.exports = {createAccount};
 

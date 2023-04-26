@@ -1,33 +1,36 @@
 import mongoose from "mongoose";
 
+const schema = mongoose.Schema;
+
 // setting schema options
-const userSchema = new mongoose.Schema({
+const userSchema = new schema({
     username: {
         type: String,
-        require: true
+        required: true
     },
     password: {
         type: String,
-        require: true
+        required: true
     },
     firstname: {
         type: String,
-        require: true
+        required: true
     },
     lastname: {
         type: String,
-        require: true
+        required: true
     },
     address: {
         type: String,
-        require: true
+        required: true
     },
     email: {
         type: String,
-        require: true
+        required: true,
+        unique: true
     },
     phone: {
-        type: Number,
+        type: String,
         required: true
     },
     createdAt: {
@@ -36,7 +39,6 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-const userModel = mongoose.model("users", userSchema);
-
-export {userModel};
+const UserModel = mongoose.model("users", userSchema);
+export {UserModel};
 //console.log('Username => ', UserModel.path('username'));
