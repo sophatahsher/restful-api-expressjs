@@ -5,3 +5,6 @@ node_modules
 
 # iOS
 .DS_Store
+
+# ENV
+.env
