@@ -1,10 +1,10 @@
 const prodConfig = {
     // DB
-    db_connection_string: 'mongodb://localhost:27017/buildme_profesonal_db',
-    mongo_debug: false,
+    DB_CONNECTION_STRING: process.env.MONGO_URL,
+    MONGO_DEBUG: true,
 
     // JWT
-    jwt_key: '',
-    jwt_expiration: 360000,
+    JWT_KEY: '0123456789',
+    JWT_EXPIRATION: 360000
 };
 export default prodConfig;

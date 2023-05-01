@@ -1,42 +1,66 @@
 {
-  "name": "resume-build-api-exp",
+  "name": "resume-build-api-express",
   "version": "1.0.0",
   "description": "Resume Builder Handling RESTful API",
   "main": "app.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production && npm run server:prod",
-    "server:prod": "node dist/app.js",
-    "build": "babel app.js --out-dir dist",
-    "clean": "rimraf dis",
-    "server": "cross-env DEBUG=app nodemon --exec babel-node app.js",
-    "dev": "cross-env NODE_ENV=development npm-run-all server",
+    "start": "export NODE_ENV=production && npm run server:prod",
+    "server:prod": "babel-node app.js",
+    "build": "npm run clean && babel . -d dist --presets es2015,stage-2 --ignore spec.js, node_modules",
+    "clean": "rimraf dist",
+    "serve": "node dist/app.js",
+    "server:dev": "cross-env DEBUG=app nodemon --exec babel-node app.js",
+    "dev": "cross-env NODE_ENV=development npm-run-all server:dev",
     "prod": "npm-run-all clean build",
+    "watch:dev": "nodemon",
     "format": "prettier --write \"./**/*.js\""
   },
-  "keywords": [],
-  "author": "Sophat Chhay",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sophatahsher/restful-api-expressjs"
+  },
+  "keywords": [
+    "Node.js",
+    "ExpressJS",
+    "RESTful API"
+  ],
+  "author": "Sophat Chhay <sophat.chhay@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^4.0.1",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "cross-env": "^7.0.2",
     "debug": "^4.1.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-useragent": "^1.0.15",
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.10.5",
-    "morgan": "^1.10.0",
-    "nodemon": "^2.0.22"
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.21.0",
     "@babel/core": "^7.21.4",
     "@babel/node": "^7.20.7",
+    "@babel/plugin-transform-runtime": "^7.21.4",
     "@babel/preset-env": "^7.21.4",
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.22",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.2"
+  },
+  "nodemonConfig": {
+    "exec": "npm run dev",
+    "watch": [
+      "server/*",
+      "public/*"
+    ],
+    "ignore": [
+      "**/__tests__/**",
+      "*.test.js",
+      "*.spec.js"
+    ]
   }
 }

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import debug from 'debug';
-import appConfig from '../config';
+import appConfig from '../env.config';
 
 const log = debug('app');
 
@@ -37,11 +37,10 @@ const connectMongo = async () => {
         socketTimeoutMS: 45000,
         family: 4,
     };
-
-    let connectionUri = appConfig.db_connection_string;
-    await mongoose.connect(connectionUri, dbOptions).catch(err => {
-        Logger.log.fata(`DATABASE - Error: ${err}`);
+  
+    let connectionURI = appConfig.DB_CONNECTION_STRING;
+    await mongoose.connect(connectionURI, dbOptions).catch(err => {
+       Logger.log.fata(`DATABASE - Error: ${err}`);
     });
 };
-
 export default connectMongo;

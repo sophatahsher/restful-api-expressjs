@@ -9,10 +9,7 @@ RUN apk update \
   && apk add --no-cache python3 make g++ # for bcrypt
 
 # Copy dependencies file
-COPY package.json ./
-
-# Switch current user to node user
-USER node
+COPY package*.json ./
 
 # Install dependencies
 RUN npm install
@@ -20,11 +17,14 @@ RUN npm install
 # Copy application code with the appropriate permissions to the application directory on the container
 COPY --chown=node:node . .
 
+# Switch current user to node user
+USER node
+
 # Expose port 8000
-EXPOSE 9000
+#EXPOSE 8085
 
 # Build in Container
-RUN npm run build
+#RUN npm run build
 
 # Run command to start the application
-CMD [ "npm", "dev" ]
+CMD [ "npm", "start" ]

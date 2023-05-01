@@ -1,4 +1,3 @@
-node_modules
 npm-debug.log
 Dockerfile
 .dockerignore
@@ -8,4 +7,7 @@ Dockerfile
 .gitignore
 
 # MacOS
+/node_modules
 .DS_Store
+.env
+docker-compose.yml

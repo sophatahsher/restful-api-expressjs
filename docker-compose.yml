@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  # service 1
+  database:
+    image: mongo:latest
+    container_name: "mongodb"
+    restart: unless-stopped
+    environment: 
+      - MONGO_INITDB_ROOT_USERNAME=my-username
+      - MONGO_INITDB_ROOT_PASSWORD=my-root-password
+    volumes:
+      - mongodb:/data/db
+    ports:
+      - '27017:27017'
+  # service 2
+  node-app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    restart: unless-stopped
+    image: restful-api-kh
+    container_name: "restful-api-kh"
+    environment: 
+      - MONGO_URL=mongodb://database:27017
+    volumes: 
+      - /home/node/app/node_modules
+      - .:/home/node/app
+    ports:
+      - '8085:8085'
+volumes:
+  mongodb:
